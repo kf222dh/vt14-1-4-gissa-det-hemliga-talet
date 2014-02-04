@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace gissa_det_hemliga_talet.Modal
+namespace gissa_det_hemliga_talet.Model
 {
     public enum Outcome { Indefinite, Low, High, Correct, NoMoreGuesses, PreviousGuess }
 
