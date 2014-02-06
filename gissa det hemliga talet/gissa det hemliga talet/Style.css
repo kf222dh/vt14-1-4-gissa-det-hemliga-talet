@@ -1,2 +1,54 @@
-﻿body {
+﻿body 
+{
+    background-color: #202020;
+    font-size: 100%;
+    font-family: 'Corbel', sans-serif;
+    line-height: 1.2;
+    color: #b81d18;
+}
+
+h1, h2 
+{
+    display: block;
+    font-family: 'Corbel', sans-serif;
+    font-size: 2rem;
+    color: inherit;
+}
+
+h2 
+{
+    font-size: 1.6rem;
+}
+
+p, a 
+{
+    font-size: 1.2rem;
+    color: inherit;
+}
+
+* 
+{
+    margin: 0;
+    padding: 0;
+}
+
+.error 
+{
+    color: #b81d18;
+}
+
+input[type="submit"] 
+{
+    margin-top: 5px;
+    display: block;
+}
+
+#ValidationSummary 
+{
+    font-weight: bolder;
+}
+
+#ValidationSummary ul li 
+{
+    font-weight: normal;
 }
