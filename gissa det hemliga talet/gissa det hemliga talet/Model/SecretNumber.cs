@@ -7,91 +7,100 @@ namespace gissa_det_hemliga_talet.Model
 
     public class SecretNumber
     {
+        public const int MaxNumberOfGuesses = 7;
+
         //Fält och egenskap
         private int _number;
 
         private List<int> _previousGuesses;
 
-        public int number
+        public bool CanMakeGuess
+        {
+            get { return Count < MaxNumberOfGuesses && !_previousGuesses.Contains(_number); }
+        }
+
+        public int? Number
         {
             get
             {
+                if (CanMakeGuess)
+                {
+                    return null;
+                }
                 return _number;//Skickar tillbaka number
             }
         }
 
-        public List<int> previousGuesses
+        public IEnumerable<int> PreviousGuesses
         {
             get
             {
-                return _previousGuesses;
+                return _previousGuesses.AsReadOnly();
             }
         }
 
-        public Outcome status
+        public Outcome Status
         {
-            set;
+            private set;
             get;
         }
 
-        private int count
+        private int Count
         {
-            get;
-            set;
+            get { return _previousGuesses.Count; }
         }
 
         public SecretNumber()
         {
-            Random random = new Random();//Skapar ett random objekt som kommer att slumpa ett tal mellan 1-100
-            this._number = random.Next(1, 100);
-            this._previousGuesses = new List<int>(7);//Skapar en lista med 7 "platser"
+            this._previousGuesses = new List<int>(MaxNumberOfGuesses);//Skapar en lista med 7 "platser"
             this.Initialize();
         }
 
-        private void Initialize()
+        public void Initialize()
         {
+            Random random = new Random();//Skapar ett random objekt som kommer att slumpa ett tal mellan 1-100
+            this._number = random.Next(1, 101);
             _previousGuesses.Clear();//Tömmer listan varje gång den körs
-            this.status = Outcome.Indefinite;
+            this.Status = Outcome.Indefinite;
         }
 
         public Outcome MakeGuess(int guess)
         {
-            if (this.previousGuesses.Contains(guess))//Kollar om gissningen är giltig
+            if (this._previousGuesses.Contains(guess))//Kollar om gissningen är giltig
             {
-                this.status = Outcome.PreviousGuess;
-                return this.status;
+                this.Status = Outcome.PreviousGuess;
+                return this.Status;
             }
 
-            this.count += 1;//Räknare som plusar varje gång
-            this.previousGuesses.Add(guess);//Lägger till vad man har gissat innan
+            this._previousGuesses.Add(guess);//Lägger till vad man har gissat innan
 
-            if (this.count == 7)//Körs om man har slut på gissningar, låser knappen så man inte kan gissa mer
+            if (this.Count == MaxNumberOfGuesses)//Körs om man har slut på gissningar, låser knappen så man inte kan gissa mer
             {
-                if (guess == this.number)
+                if (guess == this._number)
                 {
-                    this.status = Outcome.Correct;
+                    this.Status = Outcome.Correct;
                 }
                 else
                 {
-                    this.status = Outcome.NoMoreGuesses;
+                    this.Status = Outcome.NoMoreGuesses;
                 }
-                return this.status;
+                return this.Status;
             }
 
-            if (guess < this.number)//För låg skickar statusen
+            if (guess < this._number)//För låg skickar statusen
             {
-                this.status = Outcome.Low;
-                return this.status;
+                this.Status = Outcome.Low;
+                return this.Status;
             }
-            else if (guess > this.number)//För hög skickar statusen
+            else if (guess > this._number)//För hög skickar statusen
             {
-                this.status = Outcome.High;
-                return this.status;
+                this.Status = Outcome.High;
+                return this.Status;
             }
             else
             {
-                this.status = Outcome.Correct;//Om gissninge var korrekt
-                return this.status;
+                this.Status = Outcome.Correct;//Om gissninge var korrekt
+                return this.Status;
             }
         }
     }
